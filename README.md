@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puzzle Deslizante 4x4</title>
+<title>Puzzle Deslizante 3x3</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -17,12 +17,16 @@
         margin: 0;
     }
     h1 {
+        margin-bottom: 10px;
+    }
+    #timer {
+        font-size: 18px;
         margin-bottom: 20px;
     }
     #puzzle {
         display: grid;
-        grid-template-columns: repeat(4, 80px);
-        grid-template-rows: repeat(4, 80px);
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
         gap: 5px;
     }
     .tile {
@@ -49,10 +53,49 @@
 </head>
 <body>
 <h1>Resuelve el Puzzle</h1>
+<div id="timer">Tiempo restante: 10:00</div>
 <div id="puzzle"></div>
+
 <script>
-const size = 4;
+const size = 3;
 let tiles = [];
+let timer;
+let timeLeft = 600; // 10 minutos en segundos
+
+function startTimer() {
+    timer = setInterval(() => {
+        timeLeft--;
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById('timer').textContent = 
+            `Tiempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            preguntarAyuda();
+        }
+    }, 1000);
+}
+
+function preguntarAyuda() {
+    let respuesta1 = prompt("¿Pudiste acabarlo zaye?");
+    if (respuesta1 && respuesta1.toLowerCase() === "no") {
+        let respuesta2 = prompt("¿Te ayudo?");
+        if (respuesta2 && 
+            ["sí","si","sí","sí́","s","S","SI","Si","Sí","SÍ"].includes(respuesta2.trim())) {
+            resolverAutomaticamente();
+        }
+    }
+}
+
+function resolverAutomaticamente() {
+    tiles = [...Array(size * size - 1).keys()].map(i => i + 1);
+    tiles.push(null);
+    drawPuzzle();
+    setTimeout(() => {
+        alert("¡Felicidades! La palabra clave es: GIRASOL");
+    }, 300);
+}
 
 function createTiles() {
     tiles = [];
@@ -111,6 +154,7 @@ function checkWin() {
     const correct = [...Array(size * size - 1).keys()].map(i => i + 1);
     correct.push(null);
     if (JSON.stringify(tiles) === JSON.stringify(correct)) {
+        clearInterval(timer);
         setTimeout(() => {
             alert("¡Felicidades! La contraseña es: AMOR MIOOOOOOOO");
         }, 100);
@@ -119,6 +163,7 @@ function checkWin() {
 
 createTiles();
 drawPuzzle();
+startTimer();
 </script>
 </body>
 </html>
