@@ -93,7 +93,7 @@ function resolverAutomaticamente() {
     tiles.push(null);
     drawPuzzle();
     setTimeout(() => {
-        alert("¡Felicidades! La palabra clave es: GIRASOL");
+        alert("¡Felicidades! La contraseña es: AMOR MIOOOOOOOO");
     }, 300);
 }
 
